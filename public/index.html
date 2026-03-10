@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Job Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Job Tracker System</h1>
+</header>
+
+<div class="container">
+
+  <!-- Create User -->
+  <section class="card">
+    <h2>Create User</h2>
+
+    <input id="name" placeholder="Name">
+    <input id="email" placeholder="Email">
+    <input id="age" placeholder="Age">
+
+    <button onclick="createUser()">Create User</button>
+  </section>
+
+
+  <!-- Create Application -->
+  <section class="card">
+    <h2>Create Application</h2>
+
+    <!-- USER DROPDOWN -->
+    <select id="userSelect"></select>
+
+    <input id="company" placeholder="Company">
+    <input id="role" placeholder="Role">
+
+    <button onclick="createApplication()">Create Application</button>
+  </section>
+
+
+  <!-- Users Section -->
+  <section class="card">
+    <h2>Users</h2>
+
+    <button onclick="loadUsers()">Load Users</button>
+
+    <div id="usersList" class="grid"></div>
+  </section>
+
+
+  <!-- Applications Section -->
+  <section class="card">
+    <h2>Applications</h2>
+
+    <button onclick="loadApplications()">Load Applications</button>
+
+    <div id="applicationsList" class="grid"></div>
+  </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
