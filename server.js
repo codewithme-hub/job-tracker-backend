@@ -1,3 +1,5 @@
+const connectDB = require("./src/config/db");
+connectDB();
 const app = require("./src/app");
 const PORT = 8000;
 app.listen(PORT,() =>{

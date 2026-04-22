@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth.middleware");
 
 const applicationController = require("../controllers/application.controller");
 
-router.post("/", applicationController.createApplication);
+//router.post("/", applicationController.createApplication);
 
-router.get("/", applicationController.getApplications);
+//router.get("/", applicationController.getApplications);
 router.get("/user/:id", applicationController.getApplicationsByUserId);
+router.get("/", auth, applicationController.getApplications);
+router.post("/", auth, applicationController.createApplication);
 
 router.get("/error-test", (req, res, next) => {
     throw new Error("This is a test error from applications route");

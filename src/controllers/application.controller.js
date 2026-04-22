@@ -1,40 +1,57 @@
 const { readData, writeData } = require("../utils/file.util");
 const crypto = require("crypto");
 
+// ✅ CREATE APPLICATION
 exports.createApplication = (req, res) => {
-  const { userId, company, role, status, date } = req.body;
+  try {
+    const userId = req.user.id; // 🔥 from JWT
+    const { company, role, status, date } = req.body;
 
-  if (!userId || !company || !role) {
-    return res.status(400).json({
-      message: "userId, company and role are required"
-    });
+    if (!company || !role) {
+      return res.status(400).json({
+        message: "company and role are required"
+      });
+    }
+
+    const applications = readData("applications.json");
+
+    const newApplication = {
+      id: crypto.randomUUID(),
+      userId,
+      company,
+      role,
+      status: status || "Applied",
+      date: date || new Date().toISOString().split("T")[0]
+    };
+
+    applications.push(newApplication);
+
+    writeData("applications.json", applications);
+
+    res.status(201).json(newApplication);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  const applications = readData("applications.json");
-
-  const newApplication = {
-    id: crypto.randomUUID(),
-    userId,
-    company,
-    role,
-    status: status || "Applied",
-    date: date || new Date().toISOString().split("T")[0]
-  };
-
-  applications.push(newApplication);
-
-  writeData("applications.json", applications);
-
-  res.status(201).json(newApplication);
 };
 
-
+// ✅ GET ALL (ONLY LOGGED-IN USER DATA)
 exports.getApplications = (req, res) => {
-  const applications = readData("applications.json");
-  res.json(applications);
+  try {
+    const userId = req.user.id;
+
+    const applications = readData("applications.json");
+
+    const userApplications = applications.filter(
+      app => app.userId === userId
+    );
+
+    res.json(userApplications);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-
+// ✅ GET BY ID
 exports.getApplicationById = (req, res) => {
   const applications = readData("applications.json");
 
@@ -49,7 +66,7 @@ exports.getApplicationById = (req, res) => {
   res.json(application);
 };
 
-
+// ✅ UPDATE
 exports.updateApplication = (req, res) => {
   const applications = readData("applications.json");
 
@@ -71,7 +88,7 @@ exports.updateApplication = (req, res) => {
   res.json(applications[index]);
 };
 
-
+// ✅ DELETE
 exports.deleteApplication = (req, res) => {
   const applications = readData("applications.json");
 
@@ -91,19 +108,21 @@ exports.deleteApplication = (req, res) => {
     message: "Application deleted successfully"
   });
 };
+
+// ✅ GET BY USER ID (OPTIONAL)
 exports.getApplicationsByUserId = (req, res, next) => {
-    try {
-      const { id } = req.params;
-  
-      const applications = readData("applications.json");
-  
-      const userApplications = applications.filter(
-        app => app.userId === id
-      );
-  
-      res.json(userApplications);
-  
-    } catch (error) {
-      next(error);
-    }
-  };
+  try {
+    const { id } = req.params;
+
+    const applications = readData("applications.json");
+
+    const userApplications = applications.filter(
+      app => app.userId === id
+    );
+
+    res.json(userApplications);
+
+  } catch (error) {
+    next(error);
+  }
+};

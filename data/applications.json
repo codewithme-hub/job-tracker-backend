@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "ce57eec1-46d0-4399-bb74-757a327104cf",
+    "userId": "17e25fb4-0fb2-40d5-a6d9-a2666dec552d",
+    "company": "Google",
+    "role": "sde",
+    "status": "Applied",
+    "date": "2026-04-04"
+  },
+  {
+    "id": "52b8271e-2b56-4e53-893b-7c5c26b5ad85",
+    "userId": "69e4e1dfbbf88fe7c2893a0d",
+    "company": "google",
+    "role": "sde",
+    "status": "Interview",
+    "date": "2026-04-20"
+  }
+]

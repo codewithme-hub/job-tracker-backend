@@ -1,86 +1,64 @@
-const { readData, writeData } = require("../utils/file.util");
-const crypto = require("crypto");
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-exports.createUser = (req, res) => {
-  const { name, email } = req.body;
+// Signup
+exports.signup = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-  if (!name || !email) {
-    return res.status(400).json({
-      message: "Name and email required"
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 🔥 NEW LINE (multer file)
+    const profilePic = req.file ? req.file.filename : null;
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      profilePic, // 🔥 ADD THIS
     });
+
+    res.status(201).json({ message: "User created", user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  const users = readData("users.json");
-
-  const newUser = {
-    id: crypto.randomUUID(),
-    name,
-    email
-  };
-
-  users.push(newUser);
-
-  writeData("users.json", users);
-
-  res.status(201).json(newUser);
 };
 
-exports.getUsers = (req, res) => {
-  const users = readData("users.json");
-  res.json(users);
-};
+// Login
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-exports.getUserById = (req, res) => {
-  const users = readData("users.json");
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email" });
+    }
 
-  const user = users.find(u => u.id === req.params.id);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
 
-  if (!user) {
-    return res.status(404).json({
-      message: "User not found"
+    const token = jwt.sign({ id: user._id }, "secret", {
+      expiresIn: "1d"
     });
-  }
 
-  res.json(user);
-};
-
-exports.updateUser = (req, res) => {
-  const users = readData("users.json");
-
-  const index = users.findIndex(u => u.id === req.params.id);
-
-  if (index === -1) {
-    return res.status(404).json({
-      message: "User not found"
+    res.json({
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic, // 🔥 IMPORTANT for frontend
+      },
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  users[index] = {
-    ...users[index],
-    ...req.body
-  };
-
-  writeData("users.json", users);
-
-  res.json(users[index]);
-};
-
-exports.deleteUser = (req, res) => {
-  const users = readData("users.json");
-
-  const index = users.findIndex(u => u.id === req.params.id);
-
-  if (index === -1) {
-    return res.status(404).json({
-      message: "User not found"
-    });
-  }
-
-  users.splice(index, 1);
-
-  writeData("users.json", users);
-
-  res.json({
-    message: "User deleted successfully"
-  });
 };
