@@ -10,6 +10,7 @@ const applicationController = require("../controllers/application.controller");
 router.get("/user/:id", applicationController.getApplicationsByUserId);
 router.get("/", auth, applicationController.getApplications);
 router.post("/", auth, applicationController.createApplication);
+// router.put("/:id", updateApplication);
 
 router.get("/error-test", (req, res, next) => {
     throw new Error("This is a test error from applications route");

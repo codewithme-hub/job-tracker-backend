@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Briefcase, BarChart, CheckCircle } from "lucide-react";
+import Navbar from "../components/Navbar"; // ✅ NEW
 
 export default function Home() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const features = [
     {
       icon: <Briefcase size={28} className="text-blue-400" />,
@@ -20,25 +24,20 @@ export default function Home() {
     },
   ];
 
+  // 🔥 SMART LOGO CLICK
+  const handleLogoClick = () => {
+    if (location.pathname === "/") {
+      window.location.reload();
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white overflow-x-hidden">
 
-      {/* 🔥 NAVBAR */}
-      <div className="w-full px-8 lg:px-20 py-6 flex justify-between items-center backdrop-blur-md bg-white/5 border-b border-white/10 sticky top-0 z-50">
-        <h1 className="text-2xl font-bold">JobTracker</h1>
-
-        <div className="flex gap-6 items-center">
-          <Link to="/login" className="text-blue-400 hover:underline">
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="bg-blue-500 px-5 py-2 rounded-lg hover:bg-blue-600 transition"
-          >
-            Signup
-          </Link>
-        </div>
-      </div>
+      {/* ✅ REUSABLE NAVBAR */}
+      <Navbar />
 
       {/* 🔥 HERO */}
       <div className="w-full flex flex-col items-center justify-center text-center mt-28 px-6 lg:px-20">
@@ -53,19 +52,19 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4">
-          <Link
-            to="/signup"
+          <button
+            onClick={() => navigate("/signup")}
             className="bg-green-500 px-7 py-3 rounded-lg hover:scale-105 hover:bg-green-600 transition duration-300 shadow-lg"
           >
             Get Started
-          </Link>
+          </button>
 
-          <Link
-            to="/login"
+          <button
+            onClick={() => navigate("/login")}
             className="border border-gray-600 px-7 py-3 rounded-lg hover:bg-gray-800 transition"
           >
             Login
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -89,12 +88,12 @@ export default function Home() {
           Start Your Job Journey Today 🚀
         </h2>
 
-        <Link
-          to="/signup"
+        <button
+          onClick={() => navigate("/signup")}
           className="bg-blue-500 px-8 py-3 rounded-lg hover:bg-blue-600 transition shadow-lg"
         >
           Get Started
-        </Link>
+        </button>
       </div>
 
     </div>

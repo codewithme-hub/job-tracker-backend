@@ -14,5 +14,93 @@
     "role": "sde",
     "status": "Interview",
     "date": "2026-04-20"
+  },
+  {
+    "id": "c44d2dcc-1b2a-4d61-b579-358f4a1b1f45",
+    "userId": "69e9209ffb07f99ee3f578b2",
+    "company": "google",
+    "role": "sde",
+    "status": "Applied",
+    "date": "2026-04-22"
+  },
+  {
+    "id": "9bc1328b-8102-4230-a841-5df6c452f631",
+    "userId": "69e9209ffb07f99ee3f578b2",
+    "company": "Netfli",
+    "role": "backend",
+    "status": "Interview",
+    "date": "2026-04-22"
+  },
+  {
+    "id": "ae556bc1-b9ea-48cc-9343-a3906cbfa66c",
+    "userId": "69e9209ffb07f99ee3f578b2",
+    "company": "google",
+    "role": "sde2",
+    "status": "Rejected",
+    "date": "2026-04-22"
+  },
+  {
+    "id": "e03e61a1-0957-4861-b6eb-734ae672fb4c",
+    "userId": "69e92c4bc534d6003f5a7336",
+    "company": "Times Internet",
+    "role": "Internship",
+    "status": "Applied",
+    "date": "2026-04-22"
+  },
+  {
+    "id": "b142381d-007c-4693-a899-8b35ecd29b21",
+    "userId": "69e92c4bc534d6003f5a7336",
+    "company": "Google ",
+    "role": "sde",
+    "status": "Rejected",
+    "date": "2026-04-22"
+  },
+  {
+    "id": "4b1f36a1-b2ee-47a5-8ad1-0bda5408a02d",
+    "userId": "69e92c4bc534d6003f5a7336",
+    "company": "netflix",
+    "role": "backend developer",
+    "status": "Interview",
+    "date": "2026-04-24"
+  },
+  {
+    "id": "119f664d-8a91-4027-a911-e961dfa84000",
+    "userId": "69ee06c8e7771363d62f778d",
+    "company": "Netflix ",
+    "role": "SDE",
+    "status": "Applied",
+    "date": "2026-04-26"
+  },
+  {
+    "id": "60de6645-ec58-4f54-afcf-8963988a3539",
+    "userId": "69ee06c8e7771363d62f778d",
+    "company": "Google",
+    "role": "Backend Developer",
+    "status": "Interview",
+    "date": "2026-04-26"
+  },
+  {
+    "id": "e30841bb-f0c6-4785-995b-e0f7830098ac",
+    "userId": "69ee06c8e7771363d62f778d",
+    "company": "Meta",
+    "role": "Data Scientist",
+    "status": "Rejected",
+    "date": "2026-04-26"
+  },
+  {
+    "id": "2f4d4594-d980-438f-831b-f433d38e9459",
+    "userId": "69ee06c8e7771363d62f778d",
+    "company": "Uber",
+    "role": "Full Stack Developer",
+    "status": "Interview",
+    "date": "2026-04-26"
+  },
+  {
+    "id": "2ccf012a-83d2-4294-828f-e556a2759306",
+    "userId": "69ee06c8e7771363d62f778d",
+    "company": "Zomato",
+    "role": "CyberSecurity",
+    "status": "Applied",
+    "date": "2026-04-26"
   }
 ]
