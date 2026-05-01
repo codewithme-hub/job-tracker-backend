@@ -66,7 +66,7 @@ job-tracker-backend/
  ⚙️ Setup Instructions
 
  1. Clone the repo
-git clone https://github.com/your-username/job-tracker-backend.git  
+git clone https://github.com/codewithme-hub/job-tracker-backend 
 cd job-tracker-backend
 
 2. Install dependencies
@@ -119,7 +119,7 @@ npm run dev
 
  🔗 GitHub Repository
 
-https://github.com/your-username/job-tracker-backend  
+https://github.com/codewithme-hub/job-tracker-backend  
 
 
  🙌 Feedback
