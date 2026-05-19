@@ -35,32 +35,49 @@ export default function Dashboard() {
     }
   }, []);
 
+  // FETCH APPLICATIONS
   const fetchApplications = async (token) => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/applications`,
         {
-          headers: { authorization: token },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       setApplications(res.data);
     } catch (err) {
-      console.log(err);
+      console.log("FETCH ERROR:", err.response || err);
     }
   };
 
+  // ADD APPLICATION
   const handleAdd = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post(
+      if (!company || !role) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/applications`,
-        { company, role, status },
         {
-          headers: { authorization: token },
+          company,
+          role,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+
+      console.log("ADD RESPONSE:", res.data);
 
       fetchApplications(token);
 
@@ -68,10 +85,12 @@ export default function Dashboard() {
       setRole("");
       setStatus("Applied");
     } catch (err) {
-      console.log(err);
+      console.log("ADD ERROR:", err.response || err);
+      alert("Failed to add application");
     }
   };
 
+  // DELETE APPLICATION
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -79,16 +98,19 @@ export default function Dashboard() {
       await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/applications/${id}`,
         {
-          headers: { authorization: token },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       fetchApplications(token);
     } catch (err) {
-      console.log(err);
+      console.log("DELETE ERROR:", err.response || err);
     }
   };
 
+  // START EDIT
   const startEdit = (app) => {
     setEditingId(app._id || app.id);
     setEditCompany(app.company);
@@ -96,6 +118,7 @@ export default function Dashboard() {
     setEditStatus(app.status);
   };
 
+  // UPDATE APPLICATION
   const handleUpdate = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -108,22 +131,27 @@ export default function Dashboard() {
           status: editStatus,
         },
         {
-          headers: { authorization: token },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       setEditingId(null);
+
       fetchApplications(token);
     } catch (err) {
-      console.log(err);
+      console.log("UPDATE ERROR:", err.response || err);
     }
   };
 
+  // FILTERED APPS
   const filteredApps =
     filter === "All"
       ? applications
       : applications.filter((app) => app.status === filter);
 
+  // CHART DATA
   const chartData = [
     {
       name: "Applied",
@@ -146,11 +174,15 @@ export default function Dashboard() {
       <Navbar />
 
       <div className="px-6 lg:px-16 py-6">
+
         {/* STATS */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+
           <div className="bg-white/5 p-4 rounded-xl border border-white/10">
             <p className="text-gray-400 text-sm">Total</p>
-            <h2 className="text-2xl font-bold">{applications.length}</h2>
+            <h2 className="text-2xl font-bold">
+              {applications.length}
+            </h2>
           </div>
 
           <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
@@ -173,10 +205,12 @@ export default function Dashboard() {
               {applications.filter((a) => a.status === "Rejected").length}
             </h2>
           </div>
+
         </div>
 
         {/* CHART */}
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 mb-8">
+
           <h2 className="text-xl font-semibold mb-4">
             Application Overview
           </h2>
@@ -189,23 +223,36 @@ export default function Dashboard() {
             <div className="w-full h-64">
               <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={chartData} dataKey="value" outerRadius={90}>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    outerRadius={90}
+                  >
                     {chartData.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index]} />
+                      <Cell
+                        key={index}
+                        fill={COLORS[index]}
+                      />
                     ))}
                   </Pie>
+
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           )}
+
         </div>
 
         {/* ADD APPLICATION */}
         <div className="bg-white/5 p-5 rounded-xl border border-white/10 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Add Application</h2>
+
+          <h2 className="text-xl font-semibold mb-4">
+            Add Application
+          </h2>
 
           <div className="flex flex-col md:flex-row gap-3">
+
             <input
               placeholder="Company"
               value={company}
@@ -232,15 +279,18 @@ export default function Dashboard() {
 
             <button
               onClick={handleAdd}
-              className="bg-green-500 px-5 py-3 rounded hover:bg-green-600"
+              className="bg-green-500 px-5 py-3 rounded hover:bg-green-600 transition"
             >
               Add
             </button>
+
           </div>
+
         </div>
 
         {/* FILTERS */}
         <div className="flex gap-3 mb-6">
+
           {["All", "Applied", "Interview", "Rejected"].map((f) => (
             <button
               key={f}
@@ -254,35 +304,47 @@ export default function Dashboard() {
               {f}
             </button>
           ))}
+
         </div>
 
-        {/* APPLICATION LIST */}
+        {/* APPLICATIONS */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
           {filteredApps.map((app) => {
-            const isEditing = editingId === (app._id || app.id);
+
+            const isEditing =
+              editingId === (app._id || app.id);
 
             return (
               <div
                 key={app._id || app.id}
                 className="bg-white/5 p-5 rounded-xl border border-white/10 hover:scale-[1.02] transition"
               >
+
                 {isEditing ? (
                   <>
+
                     <input
                       value={editCompany}
-                      onChange={(e) => setEditCompany(e.target.value)}
+                      onChange={(e) =>
+                        setEditCompany(e.target.value)
+                      }
                       className="p-3 rounded bg-gray-800 w-full mb-2"
                     />
 
                     <input
                       value={editRole}
-                      onChange={(e) => setEditRole(e.target.value)}
+                      onChange={(e) =>
+                        setEditRole(e.target.value)
+                      }
                       className="p-3 rounded bg-gray-800 w-full mb-2"
                     />
 
                     <select
                       value={editStatus}
-                      onChange={(e) => setEditStatus(e.target.value)}
+                      onChange={(e) =>
+                        setEditStatus(e.target.value)
+                      }
                       className="p-3 rounded bg-gray-800 w-full mb-2"
                     >
                       <option>Applied</option>
@@ -291,25 +353,32 @@ export default function Dashboard() {
                     </select>
 
                     <button
-                      onClick={() => handleUpdate(app._id || app.id)}
+                      onClick={() =>
+                        handleUpdate(app._id || app.id)
+                      }
                       className="mt-4 w-full bg-green-500 py-2 rounded hover:bg-green-600"
                     >
                       Save
                     </button>
+
                   </>
                 ) : (
                   <>
+
                     <h3 className="text-lg font-semibold">
                       {app.company}
                     </h3>
 
-                    <p className="text-gray-400">{app.role}</p>
+                    <p className="text-gray-400">
+                      {app.role}
+                    </p>
 
                     <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-blue-500/20">
                       {app.status}
                     </span>
 
                     <div className="flex gap-2 mt-4">
+
                       <button
                         onClick={() => startEdit(app)}
                         className="bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600"
@@ -318,18 +387,25 @@ export default function Dashboard() {
                       </button>
 
                       <button
-                        onClick={() => handleDelete(app._id || app.id)}
+                        onClick={() =>
+                          handleDelete(app._id || app.id)
+                        }
                         className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
                       >
                         Delete
                       </button>
+
                     </div>
+
                   </>
                 )}
+
               </div>
             );
           })}
+
         </div>
+
       </div>
     </div>
   );
