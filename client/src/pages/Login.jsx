@@ -13,20 +13,20 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/users/google",
+        "http://localhost:8000/api/users/login",
         {
-          token: credentialResponse.credential,
+          email,
+          password,
         }
       );
-
+  
       console.log("LOGIN RESPONSE:", res.data);
-
+  
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-
+  
       alert("Login successful");
-
-      // ✅ go to dashboard
+  
       navigate("/dashboard");
     } catch (err) {
       console.log("LOGIN ERROR:", err.response || err);
