@@ -22,7 +22,7 @@ export default function Signup() {
       }
 
       await axios.post(
-        "http://localhost:8000/api/users/signup",
+        "${import.meta.env.VITE_API_URL}/api/users/signup",
         formData
       );
 

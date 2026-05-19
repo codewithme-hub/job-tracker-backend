@@ -13,20 +13,20 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/users/login",
+        "${import.meta.env.VITE_API_URL}/api/users/login",
         {
-          email,
-          password,
+          token: credentialResponse.credential,
         }
       );
-  
+
       console.log("LOGIN RESPONSE:", res.data);
-  
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-  
+
       alert("Login successful");
-  
+
+      // ✅ go to dashboard
       navigate("/dashboard");
     } catch (err) {
       console.log("LOGIN ERROR:", err.response || err);
@@ -40,7 +40,7 @@ export default function Login() {
       console.log("STEP 1 ✅ Google token:", credentialResponse);
 
       const res = await axios.post(
-        "http://localhost:8000/api/users/google",
+        "${import.meta.env.VITE_API_URL}/api/users/google",
         {
           token: credentialResponse.credential,
         }

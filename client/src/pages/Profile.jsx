@@ -9,7 +9,7 @@ export default function Profile() {
   const profileImage = user?.profilePic
     ? user.profilePic.startsWith("http")
       ? user.profilePic
-      : `http://localhost:8000/uploads/${user.profilePic}`
+      : `${import.meta.env.VITE_API_URL}/uploads/${user.profilePic}`
     : null;
 
   return (

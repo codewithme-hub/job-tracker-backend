@@ -31,7 +31,7 @@ export default function Navbar() {
                   src={
                     user.profilePic.startsWith("http")
                       ? user.profilePic
-                      : `http://localhost:8000/uploads/${user.profilePic}`
+                      : `${import.meta.env.VITE_API_URL}/uploads/${user.profilePic}`
                   }
                   alt="profile"
                   className="w-8 h-8 rounded-full object-cover transition group-hover:scale-105"

@@ -14,7 +14,7 @@ export default function EditProfile() {
     storedUser.profilePic
       ? storedUser.profilePic.startsWith("http")
         ? storedUser.profilePic
-        : `http://localhost:8000/uploads/${storedUser.profilePic}`
+        : `${import.meta.env.VITE_API_URL}/uploads/${storedUser.profilePic}`
       : null
   );
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../components/Navbar"; // ✅ NEW
+import Navbar from "../components/Navbar";
 
 import {
   PieChart,
@@ -38,11 +38,12 @@ export default function Dashboard() {
   const fetchApplications = async (token) => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/applications",
+        `${import.meta.env.VITE_API_URL}/api/applications`,
         {
           headers: { authorization: token },
         }
       );
+
       setApplications(res.data);
     } catch (err) {
       console.log(err);
@@ -54,7 +55,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:8000/api/applications",
+        `${import.meta.env.VITE_API_URL}/api/applications`,
         { company, role, status },
         {
           headers: { authorization: token },
@@ -76,7 +77,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
 
       await axios.delete(
-        `http://localhost:8000/api/applications/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/${id}`,
         {
           headers: { authorization: token },
         }
@@ -100,7 +101,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        `http://localhost:8000/api/applications/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/${id}`,
         {
           company: editCompany,
           role: editRole,
@@ -126,15 +127,15 @@ export default function Dashboard() {
   const chartData = [
     {
       name: "Applied",
-      value: applications.filter(a => a.status === "Applied").length,
+      value: applications.filter((a) => a.status === "Applied").length,
     },
     {
       name: "Interview",
-      value: applications.filter(a => a.status === "Interview").length,
+      value: applications.filter((a) => a.status === "Interview").length,
     },
     {
       name: "Rejected",
-      value: applications.filter(a => a.status === "Rejected").length,
+      value: applications.filter((a) => a.status === "Rejected").length,
     },
   ];
 
@@ -142,14 +143,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
-
-      {/* ✅ REUSABLE NAVBAR */}
       <Navbar />
 
-      {/* 🔥 CONTENT WRAPPER */}
       <div className="px-6 lg:px-16 py-6">
-
-        {/* 🔥 STATS */}
+        {/* STATS */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white/5 p-4 rounded-xl border border-white/10">
             <p className="text-gray-400 text-sm">Total</p>
@@ -159,28 +156,30 @@ export default function Dashboard() {
           <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
             <p className="text-gray-400 text-sm">Applied</p>
             <h2 className="text-2xl font-bold">
-              {applications.filter(a => a.status === "Applied").length}
+              {applications.filter((a) => a.status === "Applied").length}
             </h2>
           </div>
 
           <div className="bg-yellow-500/10 p-4 rounded-xl border border-yellow-500/20">
             <p className="text-gray-400 text-sm">Interview</p>
             <h2 className="text-2xl font-bold">
-              {applications.filter(a => a.status === "Interview").length}
+              {applications.filter((a) => a.status === "Interview").length}
             </h2>
           </div>
 
           <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/20">
             <p className="text-gray-400 text-sm">Rejected</p>
             <h2 className="text-2xl font-bold">
-              {applications.filter(a => a.status === "Rejected").length}
+              {applications.filter((a) => a.status === "Rejected").length}
             </h2>
           </div>
         </div>
 
-        {/* 🔥 CHART */}
+        {/* CHART */}
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Application Overview</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Application Overview
+          </h2>
 
           {applications.length === 0 ? (
             <p className="text-gray-400 text-center">
@@ -202,7 +201,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* 🔥 ADD APPLICATION */}
+        {/* ADD APPLICATION */}
         <div className="bg-white/5 p-5 rounded-xl border border-white/10 mb-8">
           <h2 className="text-xl font-semibold mb-4">Add Application</h2>
 
@@ -240,7 +239,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* 🔥 FILTERS */}
+        {/* FILTERS */}
         <div className="flex gap-3 mb-6">
           {["All", "Applied", "Interview", "Rejected"].map((f) => (
             <button
@@ -257,7 +256,7 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* 🔥 APPLICATION LIST */}
+        {/* APPLICATION LIST */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredApps.map((app) => {
             const isEditing = editingId === (app._id || app.id);
@@ -300,7 +299,10 @@ export default function Dashboard() {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-lg font-semibold">{app.company}</h3>
+                    <h3 className="text-lg font-semibold">
+                      {app.company}
+                    </h3>
+
                     <p className="text-gray-400">{app.role}</p>
 
                     <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-blue-500/20">
@@ -328,7 +330,6 @@ export default function Dashboard() {
             );
           })}
         </div>
-
       </div>
     </div>
   );
