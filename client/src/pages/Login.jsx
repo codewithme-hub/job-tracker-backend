@@ -9,13 +9,17 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  // ✅ Backend URL
+  const API_URL = import.meta.env.VITE_API_URL;
+
   // 🔥 NORMAL LOGIN
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "${import.meta.env.VITE_API_URL}/api/users/login",
+        `${API_URL}/api/users/login`,
         {
-          token: credentialResponse.credential,
+          email,
+          password,
         }
       );
 
@@ -26,7 +30,6 @@ export default function Login() {
 
       alert("Login successful");
 
-      // ✅ go to dashboard
       navigate("/dashboard");
     } catch (err) {
       console.log("LOGIN ERROR:", err.response || err);
@@ -40,7 +43,7 @@ export default function Login() {
       console.log("STEP 1 ✅ Google token:", credentialResponse);
 
       const res = await axios.post(
-        "${import.meta.env.VITE_API_URL}/api/users/google",
+        `${API_URL}/api/users/google`,
         {
           token: credentialResponse.credential,
         }
@@ -48,7 +51,6 @@ export default function Login() {
 
       console.log("STEP 2 ✅ Backend response:", res.data);
 
-      // ✅ safety check
       if (!res.data.token) {
         throw new Error("No token received from backend");
       }
@@ -58,7 +60,6 @@ export default function Login() {
 
       alert("Google login successful");
 
-      // ✅ IMPORTANT FIX (no reload)
       navigate("/dashboard");
     } catch (err) {
       console.log("❌ GOOGLE LOGIN ERROR:", err.response || err);
@@ -68,7 +69,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[350px]">
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
 
@@ -88,6 +88,7 @@ export default function Login() {
         {/* 🔥 EMAIL LOGIN */}
         <input
           placeholder="Email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full mb-3 p-2 rounded bg-gray-700 outline-none"
         />
@@ -95,6 +96,7 @@ export default function Login() {
         <input
           type="password"
           placeholder="Password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full mb-4 p-2 rounded bg-gray-700 outline-none"
         />
@@ -116,7 +118,6 @@ export default function Login() {
           </span>
         </p>
       </div>
-
     </div>
   );
 }
